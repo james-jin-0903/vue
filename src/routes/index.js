@@ -19,6 +19,11 @@ export default new Router ({
             path: "/signup",
             name: "signup",
             component: () => import ('../pages/signup')
+        },
+        {
+            path: "/dashboard",
+            name: "dashboard",
+            component: () => import ('../pages/dashboard')
         }
 ]
 });

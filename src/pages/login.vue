@@ -3,24 +3,35 @@
         <h3>Log In</h3>
         <mdb-input label="Email" v-model="Email" style="margin: 40px 20px;" />
         <mdb-input label="Password" v-model="Password"  style="margin: 40px 20px;"/>
-        <button>LogIn</button>
+        <button v-on:click="login">LogIn</button>
     </div>
 </template>
 <script>
 import { mdbInput } from "mdbvue";
+import { db } from "../config/db";
+import Firebase from 'firebase';
 export default {
     name: "login",
+    firebase: {
+        users: db.ref("users")
+    },
     data: () => {
         return {
-            UserName: "",
-            LastName: "",
             Email: "",
             Password: "",
-            Confirm: ""
         }
     },
     components: {
         mdbInput
+    },
+    methods: {
+        login() {
+            Firebase.auth().signInWithEmailAndPassword(this.Email, this.Password).catch(function(error) {
+                console.log(error);
+                return;
+            });
+            this.$router.replace('/dashboard');
+        }
     }
 };
 </script>

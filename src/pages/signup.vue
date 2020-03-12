@@ -6,13 +6,18 @@
         <mdb-input label="Email" v-model="Email" style="margin: 40px 20px;" />
         <mdb-input label="Password" v-model="Password"  style="margin: 40px 20px;"/>
         <mdb-input label="Confirm" v-model="Confirm" style="margin: 40px 20px;" />
-        <button>SignUp</button>
+        <button v-on:click="signup">SignUp</button>
     </div>
 </template>
 <script>
 import { mdbInput } from "mdbvue";
+import { db } from "../config/db";
+import Firebase from 'firebase'
 export default {
     name: "signup",
+    firebase: {
+        users: db.ref("users")
+    },
     data: () => {
         return {
             UserName: "",
@@ -24,6 +29,23 @@ export default {
     },
     components: {
         mdbInput
+    },
+    methods: {
+        signup() {
+            this.$firebaseRefs.users.push({
+                firstname: this.UserName,
+                lastname: this.LastName,
+                password: this.Password,
+                email: this.Email
+            });
+            console.log("ssss");
+            Firebase.auth().createUserWithEmailAndPassword(this.Email, this.Password).then((user) => {
+                console.log(user);
+                this.$router.replace('/login')
+            }).catch((err) => {
+                alert(err.message);
+            });
+        }
     }
 };
 </script>
